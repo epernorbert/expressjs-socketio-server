@@ -1,0 +1,27 @@
+{
+  "name": "test-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^4.2.0",
+    "timesync": "^1.0.8"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13"
+  },
+  "scripts": {
+    "devStart": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/epernorbert/expressjs-socketio-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/epernorbert/expressjs-socketio-server/issues"
+  },
+  "homepage": "https://github.com/epernorbert/expressjs-socketio-server#readme"
+}
