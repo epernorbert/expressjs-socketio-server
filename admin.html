@@ -20,7 +20,7 @@
     <div id="timer" class="timer"></div>
 
     <form id="form" action="">
-        <input id="input"/>
+        <input type="number" id="input"/>
         <button type="submit">Send</button>
     </form>    
 
@@ -34,8 +34,10 @@
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             if (input.value) {
-                var test = "random"
-                socket.emit('minute', {data1: input.value, data2: test});
+                input.value = input.value * 60000; // convert to millisec
+                var now = new Date(ts.now()); // get time when click happen
+                now = now.getTime(); // convert into millisec     
+                socket.emit('minute', {data1: input.value, startTime: now}); // send data to server
                 input.value = '';
             }
         });

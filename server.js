@@ -20,8 +20,8 @@ io = socketIO(server);
 
 io.on('connection', function (socket) {    
     console.log('success-connection')
-    socket.on('minute', ({data1, data2}) => {
-        io.emit('minute', ({data1, data2}));
+    socket.on('minute', ({data1, startTime}) => {
+        io.emit('minute', ({data1, startTime}));
     });  
 });
 
