@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="public/javascript/script.js"></script>
     <script src="/timesync/timesync.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>    
     <style>
         #timer{
           font-size: 60px;
@@ -18,7 +19,6 @@
     <div id="offset" class="offset"></div>
 </header>
 
-<script src="/socket.io/socket.io.js"></script>
 <script>
     var socket = io('http://localhost:5000');
     socket.on('greeting-from-server', function (message) {
@@ -29,7 +29,12 @@
             greeting: 'Hello Server'
         });
     });
+
+    socket.on('chat message', function(data){
+        console.log(data);
+    });
 </script>
+
 <script>
     // create a timesync instance
     var ts = timesync.create({

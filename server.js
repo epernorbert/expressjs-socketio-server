@@ -24,8 +24,15 @@ io.on('connection', function (socket) {
   });
   socket.on('greeting-from-client', function (message) {
     console.log(message);
-  });
+  });  
 });
+
+io.on('connection', (socket) => {
+    console.log('success-connection')
+    socket.on('chat message', msg => {
+      io.emit('chat message', msg);
+    });  
+  });
 
 // handle timesync requests
 app.use('/timesync', timesyncServer.requestHandler);
