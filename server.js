@@ -9,6 +9,10 @@ app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/admin', function (req, res) {
+    res.sendFile(__dirname + '/admin.html');
+});
+
 server = http.Server(app);
 server.listen(5000);
 
