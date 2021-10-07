@@ -17,6 +17,7 @@
 <header>
     <div id="timer" class="timer"></div>
     <div id="offset" class="offset"></div>
+    <div id="countdown"></div>
 </header>
 
 <script>
@@ -32,6 +33,7 @@
 
     socket.on('chat message', function(data){
         console.log(data);
+        $("#countdown").text(data);
     });
 </script>
 
