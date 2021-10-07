@@ -9,9 +9,15 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="public/javascript/script.js"></script>
     <title>Admin</title>
+    <style>
+        #timer{font-size: 60px;}
+        h1{margin: 0;}
+      </style>
 </head>
 <body>
     <h1>Admin</h1>
+
+    <div id="timer" class="timer"></div>
 
     <form id="form" action="">
         <input id="input"/>
@@ -28,10 +34,28 @@
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             if (input.value) {
-                socket.emit('chat message', input.value);
+                var test = "random"
+                socket.emit('minute', {data1: input.value, data2: test});
                 input.value = '';
             }
         });
+    </script>
+
+    <script>
+        // create a timesync instance
+        var ts = timesync.create({
+        server: '/timesync',
+            interval: 4000
+        });    
+        // get notified on changes in the offset
+        ts.on('change', function (offset) {
+        /* $('.offset').text('changed offset: ' + offset + ' ms'); */
+        });    
+        // get synchronized time
+        setInterval(function () {
+            var now = new Date(ts.now());
+            $('.timer').text(now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds());
+        }, 100);
     </script>
 </body>
 </html>
