@@ -19,27 +19,42 @@
 
     <div id="timer" class="timer"></div>
 
-    <form id="form" action="">
+    <form id="minute-form" action="">
         <input type="number" id="input"/>
         <button type="submit">Send</button>
-    </form>    
+    </form>  
+    
+    <form id="start-form" action="">
+        <button type="submit">Start</button>
+    </form>
 
     <script>
         var socket = io('192.168.100.181:5000');        
 
         var messages = document.getElementById('messages');
-        var form = document.getElementById('form');
+        var minute_form = document.getElementById('minute-form');
         var input = document.getElementById('input');
 
-        form.addEventListener('submit', function(e) {
+        minute_form.addEventListener('submit', function(e) {            
             e.preventDefault();
             if (input.value) {
                 input.value = input.value * 60000; // convert to millisec
                 var now = new Date(ts.now()); // get time when click happen
-                now = now.getTime(); // convert into millisec     
-                socket.emit('minute', {data1: input.value, startTime: now}); // send data to server
-                input.value = '';
+                    now = now.getTime(); // convert into millisec     
+                socket.emit('send-minute', {data1: input.value, clickSend: now}); // send data to server
+                input.value = input.value/60000;                
             }
+        });
+
+        var start_form = document.getElementById('start-form');
+
+        start_form.addEventListener('submit', function(e){
+            console.log(input.value);
+            e.preventDefault();
+            var now = new Date(ts.now()); // get time when click happen
+                now = now.getTime(); // convert into millisec 
+            var status = 'start';
+            socket.emit('send-start', {status: status, clickStart: now}); 
         });
     </script>
 

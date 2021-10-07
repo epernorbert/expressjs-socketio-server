@@ -20,9 +20,12 @@ io = socketIO(server);
 
 io.on('connection', function (socket) {    
     console.log('success-connection')
-    socket.on('minute', ({data1, startTime}) => {
-        io.emit('minute', ({data1, startTime}));
-    });  
+    socket.on('send-minute', ({data1, clickSend}) => {
+        io.emit('send-minute', ({data1, clickSend}));
+    }); 
+    socket.on('send-start', ({status, clickStart}) => {
+        io.emit('send-start', ({status, clickStart}));
+    }); 
 });
 
 // handle timesync requests

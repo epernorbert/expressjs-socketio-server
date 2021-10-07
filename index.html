@@ -21,17 +21,26 @@
         <div id="timer" class="timer"></div>
         <div id="offset" class="offset"></div>
         <div id="countdown"></div>
-        <div id="startTime"></div>
+        <div id="clickSend"></div>
+
+        <div id="status"></div>
+        <div id="start"></div>
     </header>
 
     <script>
         var socket = io('192.168.100.181:5000');
 
-        socket.on('minute', function(data){
+        socket.on('send-minute', function(data){
             /* admin input display here */
             //console.log(data);
             $("#countdown").text(data.data1);
-            $("#startTime").text(data.startTime);
+            $("#clickSend").text(data.clickSend);
+        });
+        socket.on('send-start', function(data){
+            /* admin input display here */
+            //console.log(data);
+            $("#status").text(data.status);
+            $("#start").text(data.clickStart);
         });
     </script>
 
@@ -49,6 +58,7 @@
         setInterval(function () {
             var now = new Date(ts.now());
             $('.timer').text(now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds());
+            /* $('.timer').text(now.getTime()); */
         }, 100);
     </script>
 </body>
