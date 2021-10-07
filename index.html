@@ -2,19 +2,51 @@
 <html>
 <head>
     <script src="public/javascript/script.js"></script>
+    <script src="/timesync/timesync.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        #timer{
+          font-size: 60px;
+        }
+      </style>
 </head>
 <body>
+
+<h1>Index</h1>
+<header>
+    <div id="timer" class="timer"></div>
+    <div id="offset" class="offset"></div>
+</header>
+
 <script src="/socket.io/socket.io.js"></script>
 <script>
-            var socket = io('http://localhost:5000');
-            socket.on('greeting-from-server', function (message) {
-                document.body.appendChild(
-                    document.createTextNode(message.greeting)
-                );
-                socket.emit('greeting-from-client', {
-                    greeting: 'Hello Server'
-                });
-            });
+    var socket = io('http://localhost:5000');
+    socket.on('greeting-from-server', function (message) {
+        document.body.appendChild(
+            document.createTextNode(message.greeting)
+        );
+        socket.emit('greeting-from-client', {
+            greeting: 'Hello Server'
+        });
+    });
 </script>
+<script>
+    // create a timesync instance
+    var ts = timesync.create({
+      server: '/timesync',
+      interval: 4000
+    });
+  
+    // get notified on changes in the offset
+    ts.on('change', function (offset) {
+      /* $('.offset').text('changed offset: ' + offset + ' ms'); */
+    });
+  
+    // get synchronized time
+    setInterval(function () {
+      var now = new Date(ts.now());
+      $('.timer').text(now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds());
+    }, 100);
+  </script>
 </body>
 </html>

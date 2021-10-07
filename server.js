@@ -1,3 +1,4 @@
+var timesyncServer = require('timesync/server');
 var express = require('express'),
     app = express(),
     http = require('http'),
@@ -21,5 +22,8 @@ io.on('connection', function (socket) {
     console.log(message);
   });
 });
+
+// handle timesync requests
+app.use('/timesync', timesyncServer.requestHandler);
 
 app.use('/public', express.static(__dirname + '/public'));
