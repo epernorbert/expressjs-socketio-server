@@ -12,48 +12,47 @@
       </style>
 </head>
 <body>
+    <h1>Index</h1>
 
-<h1>Index</h1>
-<header>
-    <div id="timer" class="timer"></div>
-    <div id="offset" class="offset"></div>
-    <div id="countdown"></div>
-</header>
+    <header>
+        <div id="timer" class="timer"></div>
+        <div id="offset" class="offset"></div>
+        <div id="countdown"></div>
+    </header>
 
-<script>
-    var socket = io('http://localhost:5000');
-    socket.on('greeting-from-server', function (message) {
-        document.body.appendChild(
-            document.createTextNode(message.greeting)
-        );
-        socket.emit('greeting-from-client', {
-            greeting: 'Hello Server'
+    <script>
+        var socket = io('192.168.100.181:5000');
+        socket.on('greeting-from-server', function (message) {
+            document.body.appendChild(
+                document.createTextNode(message.greeting)
+            );
+            socket.emit('greeting-from-client', {
+                greeting: 'Hello Server'
+            });
         });
-    });
 
-    socket.on('chat message', function(data){
-        console.log(data);
-        $("#countdown").text(data);
-    });
-</script>
+        socket.on('chat message', function(data){
+            /* admin input display here */
+            //console.log(data);
+            $("#countdown").text(data);
+        });
+    </script>
 
-<script>
-    // create a timesync instance
-    var ts = timesync.create({
-      server: '/timesync',
-      interval: 4000
-    });
-  
-    // get notified on changes in the offset
-    ts.on('change', function (offset) {
-      /* $('.offset').text('changed offset: ' + offset + ' ms'); */
-    });
-  
-    // get synchronized time
-    setInterval(function () {
-      var now = new Date(ts.now());
-      $('.timer').text(now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds());
-    }, 100);
-  </script>
+    <script>
+        // create a timesync instance
+        var ts = timesync.create({
+        server: '/timesync',
+            interval: 4000
+        });    
+        // get notified on changes in the offset
+        ts.on('change', function (offset) {
+        /* $('.offset').text('changed offset: ' + offset + ' ms'); */
+        });    
+        // get synchronized time
+        setInterval(function () {
+            var now = new Date(ts.now());
+            $('.timer').text(now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds());
+        }, 100);
+    </script>
 </body>
 </html>

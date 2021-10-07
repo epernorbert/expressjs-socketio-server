@@ -16,15 +16,12 @@
     <form id="form" action="">
         <input id="input"/>
         <button type="submit">Send</button>
-      </form>
-    <div id="messages"></div>
+    </form>    
 
     <script>
-        var socket = io('http://localhost:5000');
-        socket.on('greeting-from-server', function (message) {
-            document.body.appendChild(
-                document.createTextNode(message.greeting)
-            );
+        var socket = io('192.168.100.181:5000');
+        socket.on('greeting-from-server', function (message) {            
+            console.log(message.greeting)
             socket.emit('greeting-from-client', {
                 greeting: 'Hello Server'
             });
@@ -40,10 +37,6 @@
                 socket.emit('chat message', input.value);
                 input.value = '';
             }
-        });
-
-        socket.on('chat message', function(msg) {            
-            /* messages.textContent = msg;  */           
         });
     </script>
 </body>
