@@ -18,14 +18,8 @@ server.listen(5000);
 
 io = socketIO(server);
 
-io.on('connection', function (socket) {
-    socket.emit('greeting-from-server', {
-        greeting: 'Hello Client'
-    });
-    socket.on('greeting-from-client', function (message) {
-        console.log(message);
-    }); 
-    //console.log('success-connection')
+io.on('connection', function (socket) {    
+    console.log('success-connection')
     socket.on('chat message', msg => {
         io.emit('chat message', msg);
     });  

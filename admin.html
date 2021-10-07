@@ -19,13 +19,7 @@
     </form>    
 
     <script>
-        var socket = io('192.168.100.181:5000');
-        socket.on('greeting-from-server', function (message) {            
-            console.log(message.greeting)
-            socket.emit('greeting-from-client', {
-                greeting: 'Hello Server'
-            });
-        });
+        var socket = io('192.168.100.181:5000');        
 
         var messages = document.getElementById('messages');
         var form = document.getElementById('form');

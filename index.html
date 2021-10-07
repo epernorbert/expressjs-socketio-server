@@ -22,15 +22,7 @@
 
     <script>
         var socket = io('192.168.100.181:5000');
-        socket.on('greeting-from-server', function (message) {
-            document.body.appendChild(
-                document.createTextNode(message.greeting)
-            );
-            socket.emit('greeting-from-client', {
-                greeting: 'Hello Server'
-            });
-        });
-
+                
         socket.on('chat message', function(data){
             /* admin input display here */
             //console.log(data);
