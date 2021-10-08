@@ -59,8 +59,8 @@
         // get synchronized time
         setInterval(function () {
             var now = new Date(ts.now());
-            /* $('.timer').text(now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds()); */
-            $('.timer').text(now.getTime());
+            $('.timer').text(now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds());
+            /* $('.timer').text(now.getTime()); */
             var endTime = $("#endTime").text()
             if(endTime != ''){
                 /* console.log($("#endTime").text()) */
