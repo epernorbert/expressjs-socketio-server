@@ -40,8 +40,9 @@
             if (input.value) {
                 input.value = input.value * 60000; // convert to millisec
                 var now = new Date(ts.now()); // get time when click happen
-                    now = now.getTime(); // convert into millisec     
-                socket.emit('send-minute', {data1: input.value, clickSend: now}); // send data to server
+                    now = now.getTime(); // convert into millisec    
+                var status = 'send'; 
+                socket.emit('send-minute', {status: status, inputValue: input.value, clickSend: now}); // send data to server
                 input.value = input.value/60000;                
             }
         });

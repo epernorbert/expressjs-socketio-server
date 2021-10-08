@@ -23,26 +23,25 @@
         <div id="clickSend"></div>
 
         <div id="status"></div>
-        Start<div id="start"></div>
-        End<div id="endTime"></div>
-        Countdown<div id="countdown"></div>
+        <div id="start"></div>
+        <div id="endTime"></div>
+        <div id="countdown"></div>
     </header>
 
     <script>
         var socket = io('192.168.100.181:5000');
 
         socket.on('send-minute', function(data){
-            /* admin input display here */
-            //console.log(data);
-            $("#countdown").text(data.data1);
+            /* admin input display here */                        
+            $("#status").attr("value",data.status);
+            $("#countdown").text(msConversion(data.inputValue));
             $("#clickSend").text(data.clickSend);
         });
         socket.on('send-start', function(data){
-            /* admin input display here */
-            //console.log(data);
-            console.log(data.status)
+            /* admin input display here */                        
+            $("#status").attr("value",data.status);            
             $("#start").text(data.clickStart);
-            $("#endTime").text(data.endTime);
+            $("#endTime").text(data.endTime);            
         });        
     </script>
 
@@ -61,12 +60,21 @@
             var now = new Date(ts.now());
             $('.timer').text(now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds());
             /* $('.timer').text(now.getTime()); */
-            var endTime = $("#endTime").text()
-            if(endTime != ''){
-                /* console.log($("#endTime").text()) */
-                //var print = $("#countdown").text(endTime - now.getTime())
-                $("#countdown").text(msConversion((endTime - now.getTime())))
-            }            
+            var endTime = $("#endTime").text()     
+            
+            // undefined or send
+            if($('#status').attr('value') == undefined || $('#status').attr('value') == 'send'){
+
+            }
+            // start
+            if($('#status').attr('value') == 'start'){                
+                console.log($('#status').attr('value')) 
+                if(endTime != ''){
+                    /* console.log($("#endTime").text()) */
+                    //var print = $("#countdown").text(endTime - now.getTime())
+                    $("#countdown").text(msConversion((endTime - now.getTime())))
+                } 
+            }
         }, 100);
     </script>
 
