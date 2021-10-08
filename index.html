@@ -19,13 +19,13 @@
 
     <header>
         <div id="timer" class="timer"></div>
-        <div id="offset" class="offset"></div>
-        <div id="countdown"></div>
+        <div id="offset" class="offset"></div>        
         <div id="clickSend"></div>
 
         <div id="status"></div>
-        <div id="start"></div>
-        <div id="endTime"></div>
+        Start<div id="start"></div>
+        End<div id="endTime"></div>
+        Countdown<div id="countdown"></div>
     </header>
 
     <script>
@@ -40,10 +40,10 @@
         socket.on('send-start', function(data){
             /* admin input display here */
             //console.log(data);
-            $("#status").text(data.status);
+            console.log(data.status)
             $("#start").text(data.clickStart);
             $("#endTime").text(data.endTime);
-        });
+        });        
     </script>
 
     <script>
@@ -59,8 +59,12 @@
         // get synchronized time
         setInterval(function () {
             var now = new Date(ts.now());
-            $('.timer').text(now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds());
-            /* $('.timer').text(now.getTime()); */
+            /* $('.timer').text(now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds()); */
+            $('.timer').text(now.getTime());
+            if($("#endTime").text() != ''){
+                /* console.log($("#endTime").text()) */
+                $("#countdown").text($("#endTime").text() - now.getTime())
+            }            
         }, 100);
     </script>
 </body>
