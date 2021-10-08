@@ -23,8 +23,8 @@ io.on('connection', function (socket) {
     socket.on('send-minute', ({data1, clickSend}) => {
         io.emit('send-minute', ({data1, clickSend}));
     }); 
-    socket.on('send-start', ({status, clickStart}) => {
-        io.emit('send-start', ({status, clickStart}));
+    socket.on('send-start', ({status, clickStart, endTime}) => {
+        io.emit('send-start', ({status, clickStart, endTime}));
     }); 
 });
 

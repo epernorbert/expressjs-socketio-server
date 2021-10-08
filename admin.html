@@ -48,13 +48,13 @@
 
         var start_form = document.getElementById('start-form');
 
-        start_form.addEventListener('submit', function(e){
-            console.log(input.value);
-            e.preventDefault();
+        start_form.addEventListener('submit', function(e){            
+            e.preventDefault();            
             var now = new Date(ts.now()); // get time when click happen
                 now = now.getTime(); // convert into millisec 
+            var endTime = input.value * 60000 + now;
             var status = 'start';
-            socket.emit('send-start', {status: status, clickStart: now}); 
+            socket.emit('send-start', {status: status, clickStart: now, endTime: endTime}); 
         });
     </script>
 
