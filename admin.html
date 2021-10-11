@@ -44,7 +44,7 @@
                 var status = 'send'; 
                 socket.emit('send-minute', {status: status, inputValue: input.value, clickSend: now}); // send data to server
                 input.value = input.value/60000;                
-            }
+            }            
         });
 
         var start_form = document.getElementById('start-form');

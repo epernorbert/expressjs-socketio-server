@@ -1,20 +1,11 @@
-/* database connection begin */
+/* database connection */
 var mysql = require('mysql')
 var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'countdown'
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'countdown'
 })
-
-connection.connect()
-
-connection.query('SELECT * FROM countdown', function (err, rows, fields) {
-  if (err) throw err
-
-  console.log(rows)
-})
-
 
 var timesyncServer = require('timesync/server');
 var express = require('express'),
@@ -39,7 +30,15 @@ io = socketIO(server);
 io.on('connection', function (socket) {    
     console.log('success-connection')
     socket.on('send-minute', ({status, inputValue, clickSend}) => {
-        io.emit('send-minute', ({status, inputValue, clickSend}));                
+        io.emit('send-minute', ({status, inputValue, clickSend}));  
+        
+        //connection.connect()
+        connection.query('UPDATE countdown SET status = "send", minute ='+inputValue+', save = '+clickSend+', start = NULL, end = NULL WHERE id=1;', function (err, rows, fields) {
+        if (err) throw err
+            console.log(rows)
+        })
+        //connection.end()                    
+
     }); 
     socket.on('send-start', ({status, clickStart, endTime}) => {
         io.emit('send-start', ({status, clickStart, endTime}));
@@ -50,6 +49,3 @@ io.on('connection', function (socket) {
 app.use('/timesync', timesyncServer.requestHandler);
 
 app.use('/public', express.static(__dirname + '/public'));
-
-connection.end()
-/* database connection end */
