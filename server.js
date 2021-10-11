@@ -14,12 +14,20 @@ var express = require('express'),
     socketIO = require('socket.io'),
     server, io;
 
-app.get('/', function (req, res) {
+app.get('/', function (req, res) {    
+    
     res.sendFile(__dirname + '/index.html');
+    
+    
+    /* connection.query('SELECT * FROM countdown', function (err, rows, fields) {
+    if (err) throw err
+        console.log(rows)
+        res.send(rows)
+    }) */
 });
 
 app.get('/admin', function (req, res) {
-    res.sendFile(__dirname + '/admin.html');
+    res.sendFile(__dirname + '/admin.html');    
 });
 
 server = http.Server(app);
@@ -33,9 +41,9 @@ io.on('connection', function (socket) {
         io.emit('send-minute', ({status, inputValue, clickSend}));  
         
         //connection.connect()
-        connection.query('UPDATE countdown SET status = "send", minute ='+inputValue+', save = '+clickSend+', start = NULL, end = NULL WHERE id=1;', function (err, rows, fields) {
+        connection.query('UPDATE countdown SET status ='+'"'+status+'"'+', minute ='+inputValue+', save = '+clickSend+', start = NULL, end = NULL WHERE id=1;', function (err, rows, fields) {
         if (err) throw err
-            console.log(rows)
+            //console.log(rows)
         })
         //connection.end()                    
 
