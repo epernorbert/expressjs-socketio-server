@@ -1,84 +1,85 @@
 doctype html
 head
-  meta(charset='UTF-8')
-  meta(http-equiv='X-UA-Compatible' content='IE=edge')
-  meta(name='viewport' content='width=device-width, initial-scale=1.0')
-  script(src='/socket.io/socket.io.js')
-  script(src='public/javascript/script.js')
-  script(src='/timesync/timesync.js')
-  script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
-  title= title
-  style.
+meta(charset='UTF-8')
+meta(http-equiv='X-UA-Compatible' content='IE=edge')
+meta(name='viewport' content='width=device-width, initial-scale=1.0')
+script(src='/socket.io/socket.io.js')
+script(src='public/javascript/script.js')
+script(src='/timesync/timesync.js')
+script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+title Index
+style.
     #timer{font-size: 60px;}
-    h1{margin: 0;}
-h1 Index
-h2= message
+    h1{margin: 0;}    
 header
-  #timer.timer
-  #offset.offset
-  #clickSend
-  #status
-  #start
-  #endTime
-  #countdown
+    h1= message
+    #timer.timer
+    #offset.offset
+    #clickSend
+    #status
+    #start
+    #endTime
+    #countdown
+    #text=aaa
 script.
-  var socket = io('192.168.100.181:5000');
-  socket.on('send-minute', function(data){
-  /* admin input display here */
-  $("#status").attr("value",data.status);
-  $("#countdown").text(msConversion(data.inputValue));
-  $("#clickSend").text(data.clickSend);
-  });
-  socket.on('send-start', function(data){
-  /* admin input display here */
-  $("#status").attr("value",data.status);
-  $("#start").text(data.clickStart);
-  $("#endTime").text(data.endTime);
-  });
+    var socket = io('192.168.100.181:5000');
+    socket.on('send-minute', function(data){
+        /* admin input display here */
+        $("#status").attr("value",data.status);
+        $("#countdown").text(msConversion(data.inputValue));
+        $("#clickSend").text(data.clickSend);
+    });
+    socket.on('send-start', function(data){
+        /* admin input display here */
+        $("#status").attr("value",data.status);
+        $("#start").text(data.clickStart);
+        $("#endTime").text(data.endTime);
+    });
 script.
-  // create a timesync instance
-  var ts = timesync.create({
-  server: '/timesync',
-  interval: 4000
-  });
-  // get notified on changes in the offset
-  ts.on('change', function (offset) {
-  /* $('.offset').text('changed offset: ' + offset + ' ms'); */
-  });
-  // get synchronized time
-  setInterval(function () {
-  var now = new Date(ts.now());
-  $('.timer').text(now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds());
-  /* $('.timer').text(now.getTime()); */
-  var endTime = $("#endTime").text()
-  // undefined or send
-  if($('#status').attr('value') == undefined || $('#status').attr('value') == 'send'){
-  }
-  // start
-  if($('#status').attr('value') == 'start'){
-  console.log($('#status').attr('value'))
-  if(endTime != ''){
-  /* console.log($("#endTime").text()) */
-  //var print = $("#countdown").text(endTime - now.getTime())
-  $("#countdown").text(msConversion((endTime - now.getTime())))
-  }
-  }
-  }, 100);
+    // create a timesync instance
+    var ts = timesync.create({
+        server: '/timesync',
+        interval: 4000
+    });
+    // get notified on changes in the offset
+    ts.on('change', function (offset) {
+        /* $('.offset').text('changed offset: ' + offset + ' ms'); */
+    });
+    // get synchronized time
+    setInterval(function () {
+        var now = new Date(ts.now());
+        $('.timer').text(now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds());
+        /* $('.timer').text(now.getTime()); */
+        var endTime = $("#endTime").text()
+        // undefined or send
+        if($('#status').attr('value') == undefined || $('#status').attr('value') == 'send'){
+
+        }
+        // start
+        if($('#status').attr('value') == 'start'){
+            console.log($('#status').attr('value'))
+            if(endTime != ''){
+                /* console.log($("#endTime").text()) */
+                //var print = $("#countdown").text(endTime - now.getTime())
+                $("#countdown").text(msConversion((endTime - now.getTime())))
+            }
+        }
+    }, 100);
 script.
-  function msConversion(millis) {
-  let sec = Math.floor(millis / 1000);
-  let hrs = Math.floor(sec / 3600);
-  sec -= hrs * 3600;
-  let min = Math.floor(sec / 60);
-  sec -= min * 60;
-  sec = '' + sec;
-  sec = ('00' + sec).substring(sec.length);
-  if (hrs > 0) {
-  min = '' + min;
-  min = ('00' + min).substring(min.length);
-  return hrs + ":" + min + ":" + sec;
-  }
-  else {
-  return min + ":" + sec;
-  }
-  }
+    function msConversion(millis) {
+        let sec = Math.floor(millis / 1000);
+        let hrs = Math.floor(sec / 3600);
+        sec -= hrs * 3600;
+        let min = Math.floor(sec / 60);
+        sec -= min * 60;
+        sec = '' + sec;
+        sec = ('00' + sec).substring(sec.length);
+        if (hrs > 0) {
+            min = '' + min;
+            min = ('00' + min).substring(min.length);
+            return hrs + ":" + min + ":" + sec;
+        }
+        else {
+            return min + ":" + sec;
+        }
+    }

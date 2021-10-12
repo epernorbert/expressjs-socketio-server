@@ -16,7 +16,7 @@ var express = require('express'),
 
 app.set('view engine', 'pug')
 app.get('/', function (req, res) {
-    res.render('index', { title: 'Hey', message: 'Hello there!' })
+    res.render('index', { message: 'Index page' })
 })
 
 /* app.get('/', function (req, res) {    
@@ -31,8 +31,8 @@ app.get('/', function (req, res) {
 /* }); */
 
 app.get('/admin', function (req, res) {
-    res.sendFile(__dirname + '/admin.html');    
-});
+    res.render('admin', { message: 'Admin page' })
+})
 
 server = http.Server(app);
 server.listen(5000);

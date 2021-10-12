@@ -1,0 +1,61 @@
+doctype html
+head
+meta(charset='UTF-8')
+meta(http-equiv='X-UA-Compatible' content='IE=edge')
+meta(name='viewport' content='width=device-width, initial-scale=1.0')
+script(src='/timesync/timesync.js')
+script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+script(src='/socket.io/socket.io.js')
+script(src='public/javascript/script.js')
+title Admin
+style.
+    #timer{font-size: 60px;}
+    h1{margin: 0;}
+header
+    h1= message
+    #timer.timer
+    form#minute-form(action='')
+        input#input(type='number')
+        button(type='submit') Send
+    form#start-form(action='')
+        button(type='submit') Start
+script.
+    var socket = io('192.168.100.181:5000');
+    var messages = document.getElementById('messages');
+    var minute_form = document.getElementById('minute-form');
+    var input = document.getElementById('input');
+    minute_form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (input.value) {
+            input.value = input.value * 60000; // convert to millisec
+            var now = new Date(ts.now()); // get time when click happen
+            now = now.getTime(); // convert into millisec
+            var status = 'send';
+            socket.emit('send-minute', {status: status, inputValue: input.value, clickSend: now}); // send data to server
+            input.value = input.value/60000;
+        }
+    });
+    var start_form = document.getElementById('start-form');
+    start_form.addEventListener('submit', function(e){
+        e.preventDefault();
+        var now = new Date(ts.now()); // get time when click happen
+        now = now.getTime(); // convert into millisec
+        var endTime = input.value * 60000 + now;
+        var status = 'start';
+        socket.emit('send-start', {status: status, clickStart: now, endTime: endTime});
+    });
+script.
+    // create a timesync instance
+    var ts = timesync.create({
+        server: '/timesync',
+        interval: 4000
+    });
+    // get notified on changes in the offset
+    ts.on('change', function (offset) {
+        /* $('.offset').text('changed offset: ' + offset + ' ms'); */
+    });
+    // get synchronized time
+    setInterval(function () {
+        var now = new Date(ts.now());
+        $('.timer').text(now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds());
+    }, 100);
