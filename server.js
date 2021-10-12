@@ -16,7 +16,13 @@ var express = require('express'),
 
 app.set('view engine', 'pug')
 app.get('/', function (req, res) {
-    res.render('index', { message: 'Index page' })
+    connection.query('SELECT status FROM countdown', function (err, rows, fields) {
+        if (err) throw err
+            let products = rows[0].status;
+            res.render('index', { test: products, message: 'Index page' })
+            //console.log(rows)
+            //res.send(rows)
+        })            
 })
 
 /* app.get('/', function (req, res) {    
