@@ -16,10 +16,11 @@ var express = require('express'),
 
 app.set('view engine', 'pug')
 app.get('/', function (req, res) {
-    connection.query('SELECT status FROM countdown', function (err, rows, fields) {
+    connection.query('SELECT status, minute FROM countdown', function (err, rows, fields) {
         if (err) throw err
-            let products = rows[0].status;
-            res.render('index', { test: products, message: 'Index page' })
+            let status = rows[0].status;
+            let minute = rows[0].minute;
+            res.render('index', { minute: msConversion(minute), message: 'Index page' })
             //console.log(rows)
             //res.send(rows)
         })            
@@ -52,14 +53,21 @@ io.on('connection', function (socket) {
         
         //connection.connect()
         connection.query('UPDATE countdown SET status ='+'"'+status+'"'+', minute ='+inputValue+', save = '+clickSend+', start = NULL, end = NULL WHERE id=1;', function (err, rows, fields) {
-        if (err) throw err
-            //console.log(rows)
+            if (err) throw err
+                //console.log(rows)
         })
-        //connection.end()                    
+        //connection.end()
 
     }); 
     socket.on('send-start', ({status, clickStart, endTime}) => {
         io.emit('send-start', ({status, clickStart, endTime}));
+
+        //connection.connect()
+        connection.query('UPDATE countdown SET status ='+'"'+status+'"'+', start = '+'"'+clickStart+'"'+', end = '+'"'+endTime+'"'+' WHERE id=1;', function (err, rows, fields) {
+            if (err) throw err
+                //console.log(rows)
+            })
+            //connection.end()
     }); 
 });
 
@@ -67,3 +75,22 @@ io.on('connection', function (socket) {
 app.use('/timesync', timesyncServer.requestHandler);
 
 app.use('/public', express.static(__dirname + '/public'));
+
+
+function msConversion(millis) {
+    let sec = Math.floor(millis / 1000);
+    let hrs = Math.floor(sec / 3600);
+    sec -= hrs * 3600;
+    let min = Math.floor(sec / 60);
+    sec -= min * 60;
+    sec = '' + sec;
+    sec = ('00' + sec).substring(sec.length);
+    if (hrs > 0) {
+        min = '' + min;
+        min = ('00' + min).substring(min.length);
+        return hrs + ":" + min + ":" + sec;
+    }
+    else {
+        return min + ":" + sec;
+    }
+}

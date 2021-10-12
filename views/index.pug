@@ -19,8 +19,7 @@ header
     #status
     #start
     #endTime
-    #countdown
-    #text=test
+    #countdown=minute
 script.
     var socket = io('192.168.100.181:5000');
     socket.on('send-minute', function(data){
