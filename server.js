@@ -14,17 +14,21 @@ var express = require('express'),
     socketIO = require('socket.io'),
     server, io;
 
-app.get('/', function (req, res) {    
+app.set('view engine', 'pug')
+app.get('/', function (req, res) {
+    res.render('index', { title: 'Hey', message: 'Hello there!' })
+})
+
+/* app.get('/', function (req, res) {    
     
-    res.sendFile(__dirname + '/index.html');
-    
+    res.sendFile(__dirname + '/index.html');  */   
     
     /* connection.query('SELECT * FROM countdown', function (err, rows, fields) {
     if (err) throw err
         console.log(rows)
         res.send(rows)
     }) */
-});
+/* }); */
 
 app.get('/admin', function (req, res) {
     res.sendFile(__dirname + '/admin.html');    
