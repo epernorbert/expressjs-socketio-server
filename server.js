@@ -16,26 +16,22 @@ var express = require('express'),
 
 app.set('view engine', 'pug')
 app.get('/', function (req, res) {
-    connection.query('SELECT status, minute FROM countdown', function (err, rows, fields) {
+    connection.query('SELECT * FROM countdown', function (err, rows, fields) {
         if (err) throw err
-            let status = rows[0].status;
-            let minute = rows[0].minute;
-            res.render('index', { minute: msConversion(minute), message: 'Index page' })
-            //console.log(rows)
-            //res.send(rows)
-        })            
+        let status = rows[0].status;        
+        let minute = rows[0].minute;
+        let start  = rows[0].start;
+        let end    = rows[0].end;
+        if(status == 'send'){
+            res.render('index', { minute: msConversion(minute), message: 'Index page', status: status })
+        }  
+        if(status == 'start'){
+            res.render('index', { end: end, message: 'Index pagee', status: status })
+        }             
+        //console.log(rows)
+        //res.send(rows)
+    })            
 })
-
-/* app.get('/', function (req, res) {    
-    
-    res.sendFile(__dirname + '/index.html');  */   
-    
-    /* connection.query('SELECT * FROM countdown', function (err, rows, fields) {
-    if (err) throw err
-        console.log(rows)
-        res.send(rows)
-    }) */
-/* }); */
 
 app.get('/admin', function (req, res) {
     res.render('admin', { message: 'Admin page' })
@@ -66,8 +62,8 @@ io.on('connection', function (socket) {
         connection.query('UPDATE countdown SET status ='+'"'+status+'"'+', start = '+'"'+clickStart+'"'+', end = '+'"'+endTime+'"'+' WHERE id=1;', function (err, rows, fields) {
             if (err) throw err
                 //console.log(rows)
-            })
-            //connection.end()
+        })
+        //connection.end()
     }); 
 });
 
@@ -75,7 +71,6 @@ io.on('connection', function (socket) {
 app.use('/timesync', timesyncServer.requestHandler);
 
 app.use('/public', express.static(__dirname + '/public'));
-
 
 function msConversion(millis) {
     let sec = Math.floor(millis / 1000);

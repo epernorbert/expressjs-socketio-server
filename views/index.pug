@@ -14,26 +14,24 @@ style.
 header
     h1= message
     #timer.timer
-    #offset.offset
-    #clickSend
-    #status
+    #offset.offset    
+    #status(value=status)
     #start
-    #endTime
+    #endTime(value=end)
     #countdown=minute
 script.
     var socket = io('192.168.100.181:5000');
     socket.on('send-minute', function(data){
         /* admin input display here */
         $("#status").attr("value",data.status);
-        $("#countdown").text(msConversion(data.inputValue));
-        $("#clickSend").text(data.clickSend);
+        $("#countdown").text(msConversion(data.inputValue));        
     });
     socket.on('send-start', function(data){
         /* admin input display here */
         $("#status").attr("value",data.status);
-        $("#start").text(data.clickStart);
-        $("#endTime").text(data.endTime);
-    });
+        $("#start").attr("value",data.clickStart);
+        $("#endTime").attr("value",data.endTime);
+    });    
 script.
     // create a timesync instance
     var ts = timesync.create({
@@ -49,7 +47,7 @@ script.
         var now = new Date(ts.now());
         $('.timer').text(now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds());
         /* $('.timer').text(now.getTime()); */
-        var endTime = $("#endTime").text()
+        var endTime = $("#endTime").attr('value')
         // undefined or send
         if($('#status').attr('value') == undefined || $('#status').attr('value') == 'send'){
 
