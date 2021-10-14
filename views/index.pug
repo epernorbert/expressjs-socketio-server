@@ -22,23 +22,20 @@ header
     #countdown=minute
 script.
     var socket = io('192.168.100.181:5000');
-    socket.on('send-minute', function(data){
-        /* admin input display here */
+    socket.on('send-minute', function(data){    
         $("#status").attr("value",data.status);
         $("#countdown").text(msConversion(data.inputValue));        
     });
-    socket.on('send-start', function(data){
-        /* admin input display here */
+    socket.on('send-start', function(data){        
         $("#status").attr("value",data.status);
         $("#start").attr("value",data.clickStart);
         $("#endTime").attr("value",data.endTime);
     });   
-    socket.on('send-pause', function(data){
-        /* admin input display here */
+    socket.on('send-pause', function(data){    
         $("#status").attr("value",data.status);
         $("#pause").attr("value",data.minuteLeft);        
-    }); 
-script.
+    });     
+        
     // create a timesync instance
     var ts = timesync.create({
         server: '/timesync',
@@ -61,19 +58,24 @@ script.
         // start
         if($('#status').attr('value') == 'start'){
             console.log($('#status').attr('value'))
-            if(endTime != ''){
-                /* console.log($("#endTime").text()) */
-                //var print = $("#countdown").text(endTime - now.getTime())
+            if(endTime != ''){                                
                 $("#countdown").text(msConversion((endTime - now.getTime())))
             }
-        } 
-        // pause
-        if($('#status').attr('value') == 'pause'){
-            // console.log($('#status').attr('value'))
+        }                
+    }, 100);   
+       
+    // pause
+    var counter = 0;
+    var refreshId = setInterval(function() {
+        counter++;
+        if($('#status').attr('value') == 'pause'){            
             $("#countdown").text(msConversion($('#pause').attr('value')))
-        }       
-    }, 100);        
-script.
+        }
+        if (counter > 20) {
+            clearInterval(refreshId);
+        }        
+    }, 200);
+
     function msConversion(millis) {
         let sec = Math.floor(millis / 1000);
         let hrs = Math.floor(sec / 3600);

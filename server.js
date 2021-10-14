@@ -50,23 +50,17 @@ io.on('connection', function (socket) {
     console.log('success-connection')
     socket.on('send-minute', ({status, inputValue, clickSend}) => {
         io.emit('send-minute', ({status, inputValue, clickSend}));  
-        
-        //connection.connect()
+                
         connection.query('UPDATE countdown SET status ='+'"'+status+'"'+', minute ='+inputValue+', save = '+clickSend+', start = NULL, end = NULL WHERE id=1;', function (err, rows, fields) {
-            if (err) throw err
-                //console.log(rows)
-        })
-        //connection.end()
+            if (err) throw err        
+        })        
     }); 
     socket.on('send-start', ({status, clickStart, endTime}) => {
         io.emit('send-start', ({status, clickStart, endTime}));
-
-        //connection.connect()
+        
         connection.query('UPDATE countdown SET status ='+'"'+status+'"'+', start = '+'"'+clickStart+'"'+', end = '+'"'+endTime+'"'+' WHERE id=1;', function (err, rows, fields) {
             if (err) throw err
-                //console.log(rows)
-        })
-        //connection.end()
+        })        
     }); 
     socket.on('send-pause', ({status, clickPause}) => {        
 
@@ -74,15 +68,11 @@ io.on('connection', function (socket) {
             if (err) throw err
             let minute = rows[0].minute;
             let end    = rows[0].end;
-            minuteLeft = minute - (minute - (end - clickPause))
-            //console.log(rows)
-            //connection.connect()
+            minuteLeft = minute - (minute - (end - clickPause))                      
             connection.query('UPDATE countdown SET status ='+'"'+status+'"'+', pause ='+'"'+clickPause+'"'+', minute ='+'"'+minuteLeft+'"'+'  WHERE id=1;', function (err, rows, fields) {
-                if (err) throw err
-                //console.log(rows)
+                if (err) throw err                
                 io.emit('send-pause', ({status, minuteLeft}));
-            })
-            //connection.end()
+            })            
         })        
     });
 });
