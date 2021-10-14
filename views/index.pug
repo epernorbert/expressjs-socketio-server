@@ -18,6 +18,7 @@ header
     #status(value=status)
     #start
     #endTime(value=end)
+    #pause(value=minuteLeft)
     #countdown=minute
 script.
     var socket = io('192.168.100.181:5000');
@@ -31,7 +32,12 @@ script.
         $("#status").attr("value",data.status);
         $("#start").attr("value",data.clickStart);
         $("#endTime").attr("value",data.endTime);
-    });    
+    });   
+    socket.on('send-pause', function(data){
+        /* admin input display here */
+        $("#status").attr("value",data.status);
+        $("#pause").attr("value",data.minuteLeft);        
+    }); 
 script.
     // create a timesync instance
     var ts = timesync.create({
@@ -60,8 +66,13 @@ script.
                 //var print = $("#countdown").text(endTime - now.getTime())
                 $("#countdown").text(msConversion((endTime - now.getTime())))
             }
-        }
-    }, 100);
+        } 
+        // pause
+        if($('#status').attr('value') == 'pause'){
+            // console.log($('#status').attr('value'))
+            $("#countdown").text(msConversion($('#pause').attr('value')))
+        }       
+    }, 100);        
 script.
     function msConversion(millis) {
         let sec = Math.floor(millis / 1000);

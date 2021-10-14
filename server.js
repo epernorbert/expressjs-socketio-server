@@ -22,12 +22,16 @@ app.get('/', function (req, res) {
         let minute = rows[0].minute;
         let start  = rows[0].start;
         let end    = rows[0].end;
+        let pause    = rows[0].pause;
         if(status == 'send'){
             res.render('index', { minute: msConversion(minute), message: 'Index page', status: status })
         }  
         if(status == 'start'){
-            res.render('index', { end: end, message: 'Index pagee', status: status })
-        }             
+            res.render('index', { end: end, message: 'Index page', status: status })
+        }   
+        if(status == 'pause'){
+            res.render('index', { pause: pause, message: 'Index page', status: status })
+        }          
         //console.log(rows)
         //res.send(rows)
     })            
@@ -53,7 +57,6 @@ io.on('connection', function (socket) {
                 //console.log(rows)
         })
         //connection.end()
-
     }); 
     socket.on('send-start', ({status, clickStart, endTime}) => {
         io.emit('send-start', ({status, clickStart, endTime}));
@@ -65,6 +68,23 @@ io.on('connection', function (socket) {
         })
         //connection.end()
     }); 
+    socket.on('send-pause', ({status, clickPause}) => {        
+
+        connection.query('SELECT * FROM countdown', function (err, rows, fields) {
+            if (err) throw err
+            let minute = rows[0].minute;
+            let end    = rows[0].end;
+            minuteLeft = minute - (minute - (end - clickPause))
+            //console.log(rows)
+            //connection.connect()
+            connection.query('UPDATE countdown SET status ='+'"'+status+'"'+', pause ='+'"'+clickPause+'"'+', minute ='+'"'+minuteLeft+'"'+'  WHERE id=1;', function (err, rows, fields) {
+                if (err) throw err
+                //console.log(rows)
+                io.emit('send-pause', ({status, minuteLeft}));
+            })
+            //connection.end()
+        })        
+    });
 });
 
 // handle timesync requests

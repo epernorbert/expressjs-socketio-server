@@ -19,6 +19,8 @@ header
         button(type='submit') Send
     form#start-form(action='')
         button(type='submit') Start
+    form#pause-form(action='')
+        button(type='submit') Pause
 script.
     var socket = io('192.168.100.181:5000');
     var messages = document.getElementById('messages');
@@ -43,6 +45,14 @@ script.
         var endTime = input.value * 60000 + now;
         var status = 'start';
         socket.emit('send-start', {status: status, clickStart: now, endTime: endTime});
+    });
+    var pause_form = document.getElementById('pause-form');
+    pause_form.addEventListener('submit', function(e){
+        e.preventDefault();
+        var now = new Date(ts.now()); // get time when click happen
+        now = now.getTime(); // convert into millisec        
+        var status = 'pause';
+        socket.emit('send-pause', {status: status, clickPause: now});
     });
 script.
     // create a timesync instance
